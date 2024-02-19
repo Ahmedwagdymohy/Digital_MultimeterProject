@@ -143,6 +143,29 @@ void LCD_Clear()
  
 
 
+/**
+ * @brief 	prints float numbers
+ * 
+ * @param data      
+ * @param numOfDigits    
+ */
 
-
-
+void LCD_PRINT_FLOAT(float data,const uint8_t numOfDigits)
+{
+	unsigned char ch[10] = {' '};
+	
+	for(int j = 0 ; j < numOfDigits ; j++)
+	{
+		ch[j] = ' ';
+	}
+	
+	sprintf(ch, "%4.3f", data);  // this values are changeable
+	
+	for(int j = 0 ; j < numOfDigits ; ++j)
+	{
+		if((ch[j] != '.') && (ch[j] < '0' || ch[j] > '9'))
+		LCD_WRITE_DATA(' ');
+		else
+		LCD_WRITE_DATA(ch[j]);
+	}
+}

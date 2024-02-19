@@ -101,6 +101,13 @@ void LCD_String (char *str)	;
 
 
 
+/**
+ * @brief 
+ * 
+ * @param data 
+ * @param numOfDigits 
+ */
+void LCD_PRINT_FLOAT(float data,const uint8_t numOfDigits);
 
 
 
