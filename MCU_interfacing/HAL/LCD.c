@@ -146,31 +146,3 @@ void LCD_Clear()
 
 
 
-int main()
-{
-
-	int shift,i;
-
-	LCD_Init();		/* Initialize LCD*/
-	LCD_String("@MEGA_TEAM");/* Write string on 1st line of LCD*/
-    LCD_Command(0xC0);		/* Go to 2nd line*/
-	LCD_String("Welcome to DMM ");
-		shift = 15;	/* Number of time shifts count=15 */
-		while(1)
-		{
-			for(i=0;i<shift;i++)
-			{
-				LCD_Command(0x1c);/* shift entire display right */
-				_delay_ms(300);
-			}			
-			shift=30;/* number of time shifts 30 */
-			
-			for(i=0;i<30;i++)
-			{
-				LCD_Command(0x18);/* shift entire display left */
-				_delay_ms(300);
-			}
-		}
-	
-	return 0;
-}
