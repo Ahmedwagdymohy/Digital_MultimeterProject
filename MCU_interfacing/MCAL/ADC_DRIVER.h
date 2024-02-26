@@ -8,8 +8,10 @@
 #ifndef ADC_DRIVER_H_
 #define ADC_DRIVER_H_
 
+#include "../COTS/STD_TYPES.h"
+
 void ADC_INIT();
 
-uint16_t ADC_READ(uint8_t ch);
+u16 ADC_READ(u8 ch);
 
 #endif
