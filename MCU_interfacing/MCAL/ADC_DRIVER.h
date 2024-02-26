@@ -8,7 +8,7 @@
 #ifndef ADC_DRIVER_H_
 #define ADC_DRIVER_H_
 
-void ADC_INIT();
+void    ();
 
 uint16_t ADC_READ(uint8_t ch);
 
