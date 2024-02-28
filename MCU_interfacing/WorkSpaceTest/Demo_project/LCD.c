@@ -9,22 +9,14 @@
  * 
  */
 
-
-
-
-
-
-									
-#include <util/delay.h>			
-#include <stdlib.h>
-#include <avr/io.h>
-#include "ADC.h"
-#include "BIT_MATH.h"
-#include "DIO.h"
-#include "STD_TYPES.h"
 #include "LCD.h"
-#include "KEYPAD.h"
-#include "ADC_DRIVER.h"
+
+
+#include "STD_TYPES.h"
+#include <avr/io.h>			/* Include AVR std. library file */
+#include <util/delay.h>			/* Include inbuilt defined Delay header file */
+
+
 
  
 
@@ -158,22 +150,3 @@ void LCD_Clear()
  * @param numOfDigits    
  */
 
-void LCD_PRINT_FLOAT(float data,const uint8_t numOfDigits)
-{
-	unsigned char ch[10] = {' '};
-	
-	for(int j = 0 ; j < numOfDigits ; j++)
-	{
-		ch[j] = ' ';
-	}
-	
-	sprintf(ch, "%4.3f", data);  // this values are changeable
-	
-	for(int j = 0 ; j < numOfDigits ; ++j)
-	{
-		if((ch[j] != '.') && (ch[j] < '0' || ch[j] > '9'))
-		LCD_WRITE_DATA(' ');
-		else
-		LCD_WRITE_DATA(ch[j]);
-	}
-}

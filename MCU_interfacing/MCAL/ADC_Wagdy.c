@@ -22,7 +22,7 @@ double vout;
 unsigned int value;
 char output[6];
 
-void ADC_Init()
+void ADC_INIT()
 {
 	DDRA=0x0;			/* Make ADC port as input */
 	ADCSRA = 0x87;			/* Enable ADC, fr/128  */
@@ -30,7 +30,7 @@ void ADC_Init()
 	
 }
 
-float ADC_Read(char channel)
+float ADC_READ(char channel)
 {
 	float Ain,AinLow;
 	

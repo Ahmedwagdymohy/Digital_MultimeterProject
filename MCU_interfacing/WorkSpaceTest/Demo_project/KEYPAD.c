@@ -6,16 +6,9 @@
  */ 
 
 
-#include <util/delay.h>			
-#include <stdlib.h>
 #include <avr/io.h>
-#include "ADC.h"
-#include "BIT_MATH.h"
-#include "DIO.h"
-#include "STD_TYPES.h"
-#include "LCD.h"
-#include "KEYPAD.h"
-#include "ADC_DRIVER.h"
+#include <util/delay.h>
+#include "keypad.h"
 
 
 

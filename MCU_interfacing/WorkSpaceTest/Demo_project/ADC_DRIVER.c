@@ -5,7 +5,7 @@
  * Author : Sakka
  */ 
 
-#include <util/delay.h>			
+
 #include <stdlib.h>
 #include <avr/io.h>
 #include "ADC.h"
@@ -15,13 +15,6 @@
 #include "LCD.h"
 #include "KEYPAD.h"
 #include "ADC_DRIVER.h"
-
-
-
-
-
-
-
 void ADC_INIT(void)
 {
 	DDRA = 0x00;				// Initialize PORTA as input

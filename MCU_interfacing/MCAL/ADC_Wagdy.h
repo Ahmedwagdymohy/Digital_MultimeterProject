@@ -9,8 +9,8 @@
 #ifndef ADC_WAGDY_H_
 #define ADC_WAGDY_H_
 
-void ADC_Init();
-float ADC_Read(char channel);
+void ADC_INIT();
+float ADC_READ(char channel);
 
 
 char current(void);
