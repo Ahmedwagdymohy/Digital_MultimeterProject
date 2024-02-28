@@ -19,9 +19,9 @@
 
 
 
-#define KEY_PRT 	PORTA
-#define KEY_DDR		DDRA
-#define KEY_PIN		PINA
+#define KEY_PRT 	PORTC
+#define KEY_DDR		DDRC
+#define KEY_PIN		PINC
 
 
 unsigned char keypad[4][4] = {	{'7','8','9','/'},
