@@ -4,21 +4,45 @@
  * Created: 2/28/2024 8:57:41 PM
  *  Author: study
  */ 
+
+
+/*******<LIB************/
 #include "Ohmmeter.h"
-#define F_CPU 8000000UL			/* Define CPU Frequency e.g. here 8MHz */
 #include <avr/io.h>			/* Include AVR std. library file */
 #include <util/delay.h>			/* Include inbuilt defined Delay header file */
 
-#define LCD_Data_Dir DDRB		/* Define LCD data port direction */
-#define LCD_Command_Dir DDRC		/* Define LCD command port direction register */
-#define LCD_Data_Port PORTB		/* Define LCD data port */
-#define LCD_Command_Port PORTC		/* Define LCD data port */
-#define RS PC0				/* Define Register Select (data/command reg.)pin */
-#define RW PC1				/* Define Read/Write signal pin */
-#define EN PC2
+
+/********<defines**************/
+#define LCD_Data_Dir 					DDRB		/* Define LCD data port direction */
+#define LCD_Command_Dir 				DDRC		/* Define LCD command port direction register */
+#define LCD_Data_Port 					PORTB		/* Define LCD data port */
+#define LCD_Command_Port 				PORTC		/* Define LCD data port */
+#define RS 						 		PC0				/* Define Register Select (data/command reg.)pin */
+#define RW 								PC1				/* Define Read/Write signal pin */
+#define EN 								PC2
+#define F_CPU 							8000000UL			/* Define CPU Frequency e.g. here 8MHz */
 
 
 
+
+
+/********<Used Variables**********/
+char String[6];
+int value;
+double realvolt;
+int resisreq;
+char buffer[25];
+
+
+
+
+
+
+/**
+ * @brief this function is used to pass commands to the LCD
+ * 
+ * @param cmnd You can get the commands doc from the header file of LCD.h
+ */
 
 void LCD_Command(unsigned char cmnd)
 {
@@ -44,7 +68,19 @@ void LCD_Char (unsigned char char_data)	/* LCD data write function */
 
 
 
-//*************************************************************************************************
+
+
+
+
+
+
+
+
+/**
+ * @brief Used to send data to the LCD based on Char Datatype
+ * 
+ * @param data the data we want to view in CHAR
+ */
 void LCD_WRITE_DATA(unsigned char data)
 {
 	LCD_Data_Port = data;
@@ -58,7 +94,16 @@ void LCD_WRITE_DATA(unsigned char data)
 
 
 
-//*************************************************************************************************
+
+
+
+
+
+
+/**
+ * @brief Used to give the intial commands for the LCD to be ready working
+ * 
+ */
 void LCD_Init (void)			/* LCD Initialize function */
 {
 	LCD_Command_Dir = 0xFF;		/* Make LCD command port direction as o/p */
@@ -72,6 +117,15 @@ void LCD_Init (void)			/* LCD Initialize function */
 	LCD_Command (0x80);		/* Cursor at home position */
 }
 
+
+
+
+
+/**
+ * @brief Used to send string to the LCD by converting the String to array of char
+ * 
+ * @param str the array of char
+ */
 void LCD_String (char *str)		/* Send string to LCD function */
 {
 	int i;
@@ -81,22 +135,52 @@ void LCD_String (char *str)		/* Send string to LCD function */
 	}
 }
 
-void LCD_String_xy (char row, char pos, char *str)/* Send string to LCD with xy position */
+
+
+
+
+/**
+ * @brief 	  Send string to LCD with xy position 
+ * 
+ * @param row 
+ * @param pos 
+ * @param str 
+ */
+
+void LCD_String_xy (char row, char pos, char *str)
 {
 	if (row == 0 && pos<16)
-	LCD_Command((pos & 0x0F)|0x80);	/* Command of first row and required position<16 */
+	LCD_Command((pos & 0x0F)|0x80);				/* Command of first row and required position<16 */
 	else if (row == 1 && pos<16)
-	LCD_Command((pos & 0x0F)|0xC0);	/* Command of first row and required position<16 */
-	LCD_String(str);		/* Call LCD string function */
+	LCD_Command((pos & 0x0F)|0xC0);				/* Command of first row and required position<16 */
+	LCD_String(str);							/* Call LCD string function */
 }
 
+
+
+
+/**
+ * @brief Clear the data on the LCD
+ * 
+ */
 void LCD_Clear()
 {
-	LCD_Command (0x01);		/* clear display */
-	LCD_Command (0x80);		/* cursor at home position */
+	LCD_Command (0x01);						/* clear display */
+	LCD_Command (0x80);						/* cursor at home position */
 }
 
 
+
+
+
+
+
+
+
+/**
+ * @brief Intialize the ADC
+ * 
+ */
 void ADC_Init()
 {
 	DDRA=0x0;			/* Make ADC port as input */
@@ -105,6 +189,18 @@ void ADC_Init()
 	
 }
 
+
+
+
+
+
+
+/**
+ * @brief Read data from the ADC
+ * 
+ * @param channel  passing the port for it
+ * @return int 
+ */
 int ADC_Read(char channel)
 {
 	int Ain,AinLow;
@@ -121,7 +217,18 @@ int ADC_Read(char channel)
 	Ain = Ain + AinLow;				
 	return(Ain);			/* Return digital value*/
 }
-//*********************************************************************************
+
+
+
+
+
+
+/**
+ * @brief Used to print the integer directly
+ * 
+ * @param data 
+ * @param numOfDigits 
+ */
 void LCD_PRINT_INT( int data, const unsigned int numOfDigits)
 {
 	unsigned char ch[10] = {' '};
@@ -147,22 +254,21 @@ void LCD_PRINT_INT( int data, const unsigned int numOfDigits)
 
 
 
-char String[6];
-int value;
 
-double realvolt;
-int resisreq;
-		/* Initialization of LCD */
-/* Write string on 1st line of LCD */
-
-char buffer[25];
-
+/**
+ * @brief the main function of measuring and displaying the resistance
+ * 		  this function returns integer of the binary. 
+ * 		  after getting the value of the ADCREAD it retruns integer with ration   5v --> 1023 & 2.5v --> 512     and so on
+ * 
+ */
 void ohm_display(){
-	/* LCD16x2 cursor position */
-	value=ADC_Read(0);	/* Read ADC channel 0 */ // this function returns integer of the binary
-	//after getting the value of the ADCREAD it retruns integer with ration   5v --> 1023 & 2.5v --> 512     and so on
-	//creating a function to make this equation
-	if (value < 26){ //above 25k ohm
+
+
+	/**read the value from the ADC*/
+	value=ADC_Read(0);	
+	if (value < 26){ 
+		
+		/**If the Resis measured is above 25kohm*/
 		realvolt = ((value * 5.0) / 1023);
 		resisreq = (5/(realvolt))-(1+10);
 		LCD_Command(0x80);
