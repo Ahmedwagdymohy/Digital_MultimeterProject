@@ -2,7 +2,7 @@
  * Ohmmeter.c
  *
  * Created: 2/28/2024 8:57:41 PM
- *  Author: study
+ *  Author: AhmedWagdy
  */ 
 
 
@@ -259,16 +259,19 @@ void LCD_PRINT_INT( int data, const unsigned int numOfDigits)
  * @brief the main function of measuring and displaying the resistance
  * 		  this function returns integer of the binary. 
  * 		  after getting the value of the ADCREAD it retruns integer with ration   5v --> 1023 & 2.5v --> 512     and so on
+ * 		  LCD_Command(0x80)--->	Force the cursor to the beginning of the 1st line
+		  LCD_Command(0xC0)--->	Force the cursor to the beginning of the 2nd line
  * 
  */
+
 void ohm_display(){
 
 
 	/**read the value from the ADC*/
 	value=ADC_Read(0);	
 	if (value < 26){ 
-		
 		/**If the Resis measured is above 25kohm*/
+		/**Adjusting the measured value from the ADC to give the real value of the resis in the cct*/
 		realvolt = ((value * 5.0) / 1023);
 		resisreq = (5/(realvolt))-(1+10);
 		LCD_Command(0x80);
@@ -278,12 +281,13 @@ void ohm_display(){
 		
 	}
 	else{
+		/**If the Resis measured is Below 25kohm*/
+		/**Adjusting the measured value from the ADC to give the real value of the resis in the cct*/
 		realvolt = ((value * 5.0) / 1023);
-		/*************** NOTE that the LCD has a max value of integer to print which is 16360*********/
 		resisreq = (5/(realvolt/1000.0))-(1000+10000);
+
+
 		if(resisreq< 10000 && resisreq> 0){
-			//0x80	Force the cursor to the beginning of the 1st line
-			//0xC0	Force the cursor to the beginning of the 2nd line
 			LCD_Command(0x80);
 			LCD_String("in ohms is: ");
 			LCD_Command(0xC0);

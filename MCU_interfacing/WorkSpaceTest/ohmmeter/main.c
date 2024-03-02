@@ -2,29 +2,45 @@
  * ohmmeter_test_NOTVIP.c
  *
  * Created: 2/28/2024 2:35:01 AM
- * Author : study
+ * Author : AhmedWagdy
  */ 
 
 
+
+/*******<LIB************/
 #define F_CPU 8000000UL			/* Define CPU Frequency e.g. here 8MHz */
 #include <avr/io.h>			/* Include AVR std. library file */
 #include <util/delay.h>			/* Include inbuilt defined Delay header file */
 #include "Ohmmeter.h"
-#define LCD_Data_Dir DDRB		/* Define LCD data port direction */
-#define LCD_Command_Dir DDRC		/* Define LCD command port direction register */
-#define LCD_Data_Port PORTB		/* Define LCD data port */
-#define LCD_Command_Port PORTC		/* Define LCD data port */
-#define RS PC0				/* Define Register Select (data/command reg.)pin */
-#define RW PC1				/* Define Read/Write signal pin */
-#define EN PC2				/* Define Enable signal pin */
+
+
+
+
+/********<defines**************/
+#define LCD_Data_Dir 					DDRB		/* Define LCD data port direction */
+#define LCD_Command_Dir 				DDRC		/* Define LCD command port direction register */
+#define LCD_Data_Port 					PORTB		/* Define LCD data port */
+#define LCD_Command_Port				PORTC		/* Define LCD data port */
+#define RS							    PC0				/* Define Register Select (data/command reg.)pin */
+#define RW							    PC1				/* Define Read/Write signal pin */
+#define EN							    PC2				/* Define Enable signal pin */
  
 
 
 
 
  
+
+
+ /**
+  * @brief Main function goes here!
+  * 
+  * @return int 
+  */
+
+
 int main()
-{
+{	/**Makin D as OUTPUT & HIGH the 6th and 7th pin in portC*/
 	DDRD = 0xFF;
 	PORTC |=(1<< 6);
 	PORTC |=(1<< 7);
