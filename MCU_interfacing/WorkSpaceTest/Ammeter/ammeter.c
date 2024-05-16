@@ -18,7 +18,7 @@
 #define delay_low _delay_ms(1)
 #define delay_high _delay_ms(10)
 
-////// ADC
+////// ADC ////////
 
 #define LCD_DATA_PORT PORTB // port B is LCD data port
 
@@ -46,7 +46,7 @@ uint16_t ADC_READ(uint8_t channel)
 	return (ADC);					// returns the ADC value of the chosen channel
 }
 
-/////// LCD
+/////// LCD ///////
 
 void LCD_CMD(unsigned char cmd)
 {
@@ -174,7 +174,7 @@ void LCD_CLEAR()
 	delay_low;
 }
 
-////////// AMMETER
+////////// AMMETER //////////
 
 void Ammeter_Init(uint8_t mode)
 {
@@ -187,9 +187,11 @@ void Ammeter_Init(uint8_t mode)
 	LCD_CURSOR_POSITION(1,13);
 	LCD_PRINT_STRING("9->",3);
 	
+	//////////////////////////////////////////////////
 	DDRA = 0xFF;
 	PORTA = 0xFF;
-	DDRA &= ~(1 << DDA0); // To make PA0 input
+	DDRA &= ~(1 << DDA1); // To make PA1 input
+	//////////////////////////////////////////////////
 	
 	/*
 		if mode == 1	--> DC
@@ -198,10 +200,12 @@ void Ammeter_Init(uint8_t mode)
 	
 	if(mode == 1)
 	{
+		// DC
 		pinWriteLow(PORTA5);
 	}
 	else
 	{
+		// AC
 		pinWriteHIGH(PORTA5);
 	}
 }
@@ -235,8 +239,8 @@ char Ammeter(uint8_t range, uint8_t mode)
 		factor = 0.005 / 1024.0;
 		
 		// TODO : switch Relays.
-		pinWriteLow(PORTA3);
-		pinWriteLow(PORTA4);
+		pinWriteLow(PORTA3); // 0
+		pinWriteLow(PORTA4); // 0
 
 	}
 	else if(range == 2)
@@ -248,8 +252,8 @@ char Ammeter(uint8_t range, uint8_t mode)
 		factor = 0.05 / 1024.0;
 		
 		// TODO : switch Relays.
-		pinWriteHIGH(PORTA3);
-		pinWriteLow(PORTA4);
+		pinWriteHIGH(PORTA3); // 1
+		pinWriteLow(PORTA4);  // 0
 		
 	}
 	else if(range == 3)
@@ -259,14 +263,14 @@ char Ammeter(uint8_t range, uint8_t mode)
 		
 		//factor = 248.947;
 		factor = 4.0 / 1024.0;
-		//factor = 1;
 		
 		// TODO : switch Relays.
-		pinWriteHIGH(PORTA3);
-		pinWriteHIGH(PORTA4);
+		pinWriteHIGH(PORTA3); // 1
+		pinWriteHIGH(PORTA4); // 1
 	}
 	else
 	{
+		// Error handling
 		return 0;
 	}
 	
@@ -276,7 +280,7 @@ char Ammeter(uint8_t range, uint8_t mode)
 		value = ADC_READ(0) * factor;
 		LCD_PRINT_FLOAT(value, 6);
 		
-		// keypadValue;
+		// get keypad value to go back
 		if(keypadValue == '9')
 		{
 			break;
