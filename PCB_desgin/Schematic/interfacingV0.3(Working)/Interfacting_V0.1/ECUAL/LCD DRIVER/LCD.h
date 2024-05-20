@@ -18,6 +18,7 @@
 
 #include "../../MCAL/DIO Driver/DIO.h"
 #include "../../Utilities/Helpers.h"
+#include "../../Utilities/bit_ops.h"
 
 
 
@@ -30,8 +31,8 @@
 
 #define LCD_DATA_PORT PORTB // port B is LCD data port
 #define en 7				// enable signal is connected to port D pin 7
-#define rw 6				// read/write signal is connected to port D pin 6
-#define rs 5				// register select signal is connected to port D pin 5
+#define rw 5				// read/write signal is connected to port D pin 6
+#define rs 6				// register select signal is connected to port D pin 5
 
 
 /************************************************************************/
@@ -46,6 +47,8 @@ void LCD_PRINT_FLOAT(float data,const uint8_t numOfDigits);
 void LCD_PRINT_STRING(char st[], uint8_t _size);
 void LCD_CLEAR();
 void LCD_print_float(float num,uint8_t row,uint8_t column);
+unsigned char reverseBits(unsigned char num);
+
 
 
 #endif
