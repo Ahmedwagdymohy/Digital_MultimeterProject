@@ -7,9 +7,25 @@
 
 #include "LCD.h"
 
+unsigned char reverseBits(unsigned char num)
+{
+	unsigned int count = sizeof(num) * 8 - 1;
+	unsigned char reverse_num = num;
+	
+	num >>= 1;
+	while (num) {
+		reverse_num <<= 1;
+		reverse_num |= num & 1;
+		num >>= 1;
+		count--;
+	}
+	reverse_num <<= count;
+	return reverse_num;
+}
+
 void LCD_CMD(unsigned char cmd)
 {
-	LCD_DATA_PORT = cmd;
+	LCD_DATA_PORT = reverseBits(cmd);
 	
 	PORTD &= ~(1 << rs); // set RS to 0
 	PORTD &= ~(1 << rw); // set RW to 0
@@ -43,7 +59,7 @@ void LCD_INIT(void)
 
 void LCD_WRITE_DATA(unsigned char data)
 {
-	LCD_DATA_PORT = data;
+	LCD_DATA_PORT = reverseBits(data);
 	
 	PORTD |= (1 << rs);  // set RS to 1
 	PORTD &= ~(1 << rw); // set RW to 0
